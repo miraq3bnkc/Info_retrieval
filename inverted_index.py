@@ -15,6 +15,7 @@ for item in items :
         tokens=text.split(); #Split the text into words using spaces as the delimiter
         terms = list(set(terms+tokens))# Combine the tokens into a list of unique terms
 
-with open("words.txt", "w+") as file:
+#every word used in the C.F. collection is stored at docs/lexicon.txt file
+with open("lexicon.txt", "w+") as file:
     for term in terms :
         file.write("%s\n" % term)

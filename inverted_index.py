@@ -13,12 +13,13 @@ words = []  # Use a set to store unique words
 for doc_id in docs:
     with open(doc_id, "r") as f:
         text = f.read()
-        tokens = text.split()
-        words=set(tokens)  # Add words to the set
+        tokens = text.split() # split so as to get all the words of the doc
+        words=set(tokens)  # Add words to the set , so as to not have duplicates
 
         for word in set(tokens):  # Use a set to get unique words per document
             word_frequency = tokens.count(word)
             positions = [index for index, token in enumerate(tokens,start=1) if token == word]
+            #in the line above we iterate through enumerated tokens of the text so as to take the indexes of the word
             document_info = [doc_id, word_frequency,positions]
             data.append({'word': word, 'DocumentInfo': document_info})
 

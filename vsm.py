@@ -10,12 +10,13 @@ import pandas as pd
 inverted_file = pd.read_csv('inverted_index.csv')
 
 terms=inverted_file['word'].to_list()
+documents = os.listdir('docs')
 
 #calculate term frequency where TF=f_ij and
 #calculate inverse document frequency where IDF=log(N/n_i)
 
 #initialization of tf and idf dictionaries
-TF=[]
+TF=pd.DataFrame(columns=terms, index=documents)
 IDF=dict.fromkeys(terms) #create the keys for the dictionary of IDF 
 
 
@@ -30,10 +31,20 @@ for index, row in inverted_file.iterrows():
     
     n = len(doc_info)  # Number of documents containing the term
     IDF[term] = math.log2(N / n) 
+    for i in doc_info:
+        doc_id, word_frequency, positions = i  # Unpack the elements from i directly
+        TF.loc[doc_id, term] = word_frequency  # Assign word_frequency to TF DataFrame
 
 '''Now that the information of the inverted file is ready 
 will begin the calculations for TF and IDF'''
 
-print(IDF)
 
-#thinking of maybe changes csv file to json
+# Save the DataFrame to a CSV file
+TF.to_csv('tf.csv', index=True)
+
+
+
+
+
+
+

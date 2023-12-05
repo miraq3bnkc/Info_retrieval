@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from nltk.stem import SnowballStemmer
+from word_conversion import words_to_numbers
 
 path ='docs'
 os.chdir(path) #change directory so that we can see files inside of 'docs' 
@@ -18,6 +19,7 @@ for doc_id in docs:
     with open(doc_id, "r") as f:
         text = f.read()
         tokens = text.split() # split so as to get all the words of the doc
+        tokens=  words_to_numbers(tokens)
         stemmed_tokens = [porter2.stem(token) for token in tokens]  # Stemming the tokens
         words=set(stemmed_tokens)  # Add words to the set , so as to not have duplicates
 

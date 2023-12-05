@@ -2,6 +2,13 @@ import os
 import pandas as pd
 from nltk.stem import SnowballStemmer
 from word_conversion import words_to_numbers
+'''from nltk.corpus import stopwords
+
+# Download NLTK stopwords 
+import nltk
+nltk.download('stopwords')
+
+leaving out for now'''
 
 path ='docs'
 os.chdir(path) #change directory so that we can see files inside of 'docs' 
@@ -12,6 +19,9 @@ docs = os.listdir()
 # Create a SnowballStemmer for English (Porter2)
 porter2 = SnowballStemmer('english')
 
+# Get the list of English stop words
+#stop_words = set(stopwords.words('english'))
+
 data = []  # Create a list to store dictionaries for each word
 words = []  # Use a set to store unique words
 
@@ -20,6 +30,10 @@ for doc_id in docs:
         text = f.read()
         tokens = text.split() # split so as to get all the words of the doc
         tokens=  words_to_numbers(tokens)
+        
+        # Remove stop words and punctuation
+        #tokens = [word.lower() for word in tokens if word.lower() not in stop_words]
+
         stemmed_tokens = [porter2.stem(token) for token in tokens]  # Stemming the tokens
         words=set(stemmed_tokens)  # Add words to the set , so as to not have duplicates
 

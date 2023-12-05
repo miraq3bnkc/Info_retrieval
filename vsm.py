@@ -5,6 +5,7 @@ import ast
 import math
 import os
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Read the CSV file into a DataFrame
 inverted_file = pd.read_csv('inverted_index.csv')
@@ -43,6 +44,24 @@ TF.to_csv('tf.csv', index=True)
 IDF.to_csv('idf.csv',index=True)
 
 
+#SKLEARN RESULTS
+# Join document texts into a list
+doc_texts = []
+for doc in documents:
+    with open(os.path.join('docs', doc), 'r') as file:
+        doc_texts.append(file.read())
+
+# Use scikit-learn's TfidfVectorizer to calculate TF-IDF
+vectorizer = TfidfVectorizer(vocabulary=terms)
+X = vectorizer.fit_transform(doc_texts)
+
+# Create DataFrames for TF and IDF
+TF = pd.DataFrame(X.toarray(), columns=terms)
+IDF = pd.DataFrame({'IDF': vectorizer.idf_}, index=terms)
+
+# Save the DataFrame to CSV files
+TF.to_csv('tf_sklearn.csv', index=True)
+IDF.to_csv('idf_sklearn.csv', index=True)
 
 
 

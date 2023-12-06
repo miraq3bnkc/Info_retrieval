@@ -9,7 +9,10 @@ import pandas as pd
 # Read the CSV file into a DataFrame
 inverted_file = pd.read_csv('inverted_index.csv')
 
-'''calculate term frequency where TF=f_ij and
+'''Now that the information of the inverted file is ready 
+   will begin the calculations for TF and IDF
+
+   calculate term frequency where TF=f_ij and
    calculate inverse document frequency where IDF=log(N/n_i) '''
 
 #get the terms and documents we have
@@ -17,8 +20,8 @@ terms=inverted_file['word'].to_list()
 documents = sorted(os.listdir('docs'))
 
 #initialization of tf and idf dataframe
-TF=pd.DataFrame(columns=documents, index=terms)
-IDF = pd.DataFrame(index=terms, columns=['IDF'])  # Create an IDF DataFrame
+TF=pd.DataFrame(0.0,columns=documents, index=terms) #filled with floating point zeros
+IDF = pd.Series(index=terms) 
 
 # Count the number of files (documents)
 N = len(documents)
@@ -29,15 +32,14 @@ for index, row in inverted_file.iterrows():
     doc_info = ast.literal_eval(row['DocumentInfo'])
     
     n = len(doc_info)  # Number of documents containing the term
-    IDF.at[term,'IDF'] = math.log2(N / n) 
+    IDF[term] = math.log2(N / n) 
     for i in doc_info:
         doc_id, word_frequency, positions = i  # Unpack the elements from i directly
-        TF.loc[term, doc_id] = word_frequency  # Assign word_frequency to TF DataFrame
-
-'''Now that the information of the inverted file is ready 
-will begin the calculations for TF and IDF'''
+        # word_frequency is equal to TF
+        #calculate TF*IDF that gives as the VSM
+        #we store the result of that multification in TF dataframe
+        TF.loc[term, doc_id] = word_frequency*IDF[term]
 
 
 # Save the DataFrame to a CSV file
-TF.to_csv('tf.csv', index=True)
-IDF.to_csv('idf.csv',index=True)
+TF.to_csv('vsm.csv', index=True)

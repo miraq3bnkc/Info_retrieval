@@ -11,9 +11,11 @@ def words_to_numbers(words):
     
     for i, word in enumerate(words):
         try:
-            # Attempt conversion using word2number library
-            numeric_value = str(w2n.word_to_num(word))
-            words[i] = numeric_value  # Replace the original word at index i with its numeric value
+            if word.lower()!="point":
+                # Attempt conversion using word2number library
+                # if word isnt "point" because it converts point to "0"
+                numeric_value = str(w2n.word_to_num(word))
+                words[i] = numeric_value  # Replace the original word at index i with its numeric value
         except ValueError:
             # If word2number fails, check direct mapping
             equivalent = word_to_num.get(word.lower())

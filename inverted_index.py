@@ -53,4 +53,4 @@ inverted_index = pd.DataFrame(data)
 inverted_index = inverted_index.groupby('word')['DocumentInfo'].apply(list).reset_index()
 
 # Save the DataFrame to a CSV file
-inverted_index.to_csv('inverted_index.csv', index=False)
+inverted_index.to_csv('inverted_index.tsv',sep='\t', index=False)

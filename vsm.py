@@ -42,4 +42,4 @@ for index, row in inverted_file.iterrows():
 
 
 # Save the DataFrame to a CSV file
-TF.to_csv('vsm.tsv',sep='\t', index=True)
+TF.to_csv('vsm.csv', index=True)

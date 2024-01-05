@@ -1,14 +1,9 @@
 from collections import Counter
-from imp import SEARCH_ERROR #QOUICK FIX
 import os
 import colbert
 from colbert import Indexer
 from colbert.infra import Run, RunConfig, ColBERTConfig
-
-#FROM GITHUB READ ME
-    
 from colbert.data import Queries
-from colbert.infra import Run, RunConfig, ColBERTConfig
 from colbert import Searcher
 
 docs_directory = 'docs/' #path to your directory containing the documents
@@ -39,6 +34,9 @@ doc_maxlen = common_line_count[0][0] if common_line_count else 300  # Default to
 with open('Queries_20', 'r') as file:
     queries = file.read().splitlines()
 
+# Convert the list of queries into a dictionary format
+queries_dict = {f'query_{i}': query for i, query in enumerate(queries)}
+
 
 checkpoint = 'colbert-ir/colbertv2.0'
 nbits = 2   # encode each dimension with 2 bits
@@ -56,5 +54,6 @@ if __name__=='__main__':
         indexer.index(name=index_name, collection=collection[:max_id], overwrite=True)
     
         searcher = Searcher(index=index_name, collection=collection)
+        queries = Queries(data=queries_dict)
         ranking = searcher.search_all(queries, k=100)
         ranking.save("ranking.tsv")

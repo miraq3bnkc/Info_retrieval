@@ -13,7 +13,7 @@ line_counts=[] #it stores how many lines each doc has
 queries=[]
 
 # Iterate through all files in the directory
-for filename in os.listdir(docs_directory):
+for filename in sorted(os.listdir(docs_directory)):
     filepath = os.path.join(docs_directory, filename)
 
     with open(filepath, 'r', encoding='utf-8') as file:

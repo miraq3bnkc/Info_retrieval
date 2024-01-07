@@ -42,7 +42,7 @@ for doc_id in docs:
             positions = [index for index, token in enumerate(stemmed_tokens,start=1) if token == word]
             #in the line above we iterate through enumerated tokens of the text so as to take the indexes of the word
             document_info = [doc_id, word_frequency,positions]
-            data.append({'word': word, 'DocumentInfo': document_info})
+            data.append({'word': word, 'Information': document_info})
 
 os.chdir('..') #so that we are in the main directory of the project
 #every word used in the C.F. collection is stored at lexicon.txt file
@@ -50,7 +50,7 @@ os.chdir('..') #so that we are in the main directory of the project
 inverted_index = pd.DataFrame(data)
 
 # Group and aggregate the DocumentInfo column
-inverted_index = inverted_index.groupby('word')['DocumentInfo'].apply(list).reset_index()
+inverted_index = inverted_index.groupby('word')['Information'].apply(list).reset_index()
 
 # Save the DataFrame to a CSV file
 inverted_index.to_csv('inverted_index.csv', index=False)

@@ -78,7 +78,10 @@ def cosine_similarity(w1, w2):
     dot_product = np.dot(w1, w2)
     norm_w1 = np.linalg.norm(w1)
     norm_w2 = np.linalg.norm(w2)
-    return dot_product / (norm_w1 * norm_w2)
+    if norm_w1 != 0 and norm_w2 != 0:
+        return dot_product / (norm_w1 * norm_w2)
+    else:
+        return 0  # Return a default value or handle as appropriate
 
 '''
 We will begin with the calculations of Term Frequency
@@ -147,7 +150,7 @@ for query_id in queries_list:
     query_rankings[query_id] = similarities[:100]  # Store top 5 similarities for each query
 
 # Convert the similarity data into a DataFrame
-data = {'Query': [], 'Rank': [], 'Document_ID': [], 'Similarity': []}
+data = {'Query': [], 'Document_ID': [], 'Rank': [], 'Similarity': []}
 for query_id, sim_list in query_rankings.items():
     for rank, (doc_id, sim) in enumerate(sim_list, start=1):
         data['Query'].append(query_id)

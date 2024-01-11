@@ -19,23 +19,18 @@ def change(filename):
   
 
 def has_expected_header(filename):
-    # Read the first line of the file
-    with open(filename, 'r') as file:
-        first_line = file.readline()
-
-    # Check if the first line matches the expected header
-    expected_header = 'Query\tDocument_ID\tRank\tSimilarity\n'
-    return first_line == expected_header
+    filename = pd.read_csv(filename, delimiter='\t') 
+    if 'Query' in filename:
+       return True
+    else:
+       return False
 
 
 def find_files(filename):
-   # Walking top-down from the root
-   for root, dir, files in os.walk('experiments/notebook/using_colbert'):
-      if filename in files:
-        full_path=os.path.join(root, filename)
-        if not has_expected_header(full_path):
-            change(full_path)
-            print ("sdgvj")
-        return full_path
-
-find_files('ranking.tsv')
+    # Walking top-down from the root
+    for root, dir, files in os.walk('experiments/notebook/using_colbert'):
+        if filename in files:
+            full_path=os.path.join(root, filename)
+            if not has_expected_header(full_path):
+                change(full_path)
+            return full_path

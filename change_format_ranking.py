@@ -28,8 +28,11 @@ def change(filename):
     file.iloc[:,1] = [docs_filenames[i] for i in file.iloc[:,1]]
 
     # converting data frame to tsv and updating the existing file
-    file.to_csv(filename, sep='\t', index=False)  
+    file.to_csv(filename, sep='\t', index=False, mode='a')  
   
+# Example usage:
+change("/home/mira/Documents/uni/11th/anaktisi/Info_retrieval/experiments/notebook/using_colbert/2024-01/06/20.14.26/ranking.tsv")
+
 
 def find_files(filename):
    # Walking top-down from the root

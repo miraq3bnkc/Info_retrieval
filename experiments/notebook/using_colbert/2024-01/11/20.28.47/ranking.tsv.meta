@@ -2,9 +2,9 @@
     "metadata": {
         "hostname": "erebus",
         "git_branch": "main",
-        "git_hash": "7bfb829759fae6152413631ef036a37238150f96",
-        "git_commit_datetime": "2024-01-08 00:20:31+02:00",
-        "current_datetime": "Jan 10, 2024 ;  7:54PM EET (+0200)",
+        "git_hash": "619a0409bcaed5765250b749d4ab46744523b210",
+        "git_commit_datetime": "2024-01-10 23:46:59+02:00",
+        "current_datetime": "Jan 11, 2024 ;  8:33PM EET (+0200)",
         "cmd": "using_colbert.py"
     },
     "provenance": {
@@ -57,7 +57,7 @@
             "root": "\/home\/mira\/Documents\/uni\/11th\/anaktisi\/Info_retrieval\/experiments",
             "experiment": "notebook",
             "index_root": null,
-            "name": "2024-01\/10\/19.49.07",
+            "name": "2024-01\/11\/20.28.47",
             "rank": 0,
             "nranks": 1,
             "amp": true,

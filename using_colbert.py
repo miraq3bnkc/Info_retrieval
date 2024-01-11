@@ -35,7 +35,7 @@ with open('Queries_20', 'r') as file:
     queries = file.read().splitlines()
 
 # Convert the list of queries into a dictionary format
-queries_dict = {f'query_{i}': query for i, query in enumerate(queries)}
+queries_dict = {i: query for i, query in enumerate(queries,start=1)}
 
 
 checkpoint = 'colbert-ir/colbertv2.0'

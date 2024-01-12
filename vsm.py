@@ -34,21 +34,11 @@ def max_freq(doc,inverted_file):
                     max_freq=word_frequency
     return max_freq
 
-
-#this function calculates the TF-IDF for each term and document in an inverted index. It takes three parameters:
-# 'inverted_file': refers to the inverted index , as you can tell by the name
-# 'documents': is a list containing the ids' of documents we want to calculate tf-idf
-# 'queries': is a boolean , when True we are calculating tf-idf for queries and so we have a different formula for tf 
-
-def tf_idf(inverted_file,documents,queries):
-
+def get_idf(inverted_file,documents):
     #get the terms we have
     terms=inverted_file['word'].to_list()
-
-    #initialization of tf and idf dataframe
-    TF=pd.DataFrame(0.0,columns=documents, index=terms) #filled with floating point zeros
+    #initialization of idf dataframe
     IDF = pd.Series(index=terms) 
-
     # Count the number of files (documents)
     N = len(documents)
 
@@ -59,6 +49,26 @@ def tf_idf(inverted_file,documents,queries):
         
         n = len(doc_info)  # Number of documents containing the term
         IDF[term] = math.log2(N / n) 
+    return IDF
+
+
+#this function calculates the TF-IDF for each term and document in an inverted index. It takes three parameters:
+# 'inverted_file': refers to the inverted index , as you can tell by the name
+# 'documents': is a list containing the ids' of documents we want to calculate tf-idf
+# 'queries': is a boolean , when True we are calculating tf-idf for queries and so we have a different formula for tf 
+
+def tf_idf(inverted_file,documents,queries,IDF):
+
+    #get the terms we have
+    terms=inverted_file['word'].to_list()
+
+    #initialization of tf and idf dataframe
+    TF=pd.DataFrame(0.0,columns=documents, index=terms) #filled with floating point zeros
+
+    for _, row in inverted_file.iterrows():
+        term = row['word']
+        #we use ast because its read as a string without it 
+        doc_info = ast.literal_eval(row['Information'])
         for i in doc_info:
             if queries==False:
                 doc_id, word_frequency, positions = i  # Unpack the elements from i directly
@@ -111,7 +121,8 @@ queries_filtered = pd.merge(queries_inverted_index, pd.DataFrame({'word': common
 # (for the cosine similarity) will have the same dimensions.
 
 documents = sorted(os.listdir('docs'))
-tf_idf_docs=tf_idf(docs_filtered,documents, queries=False)
+idf=get_idf(docs_filtered,documents)
+tf_idf_docs=tf_idf(docs_filtered,documents, queries=False,IDF=idf)
 # Save the DataFrame to a CSV file
 tf_idf_docs.to_csv('vsm.csv', index=True)
 
@@ -129,7 +140,7 @@ with open('Queries_20', 'r') as f:
     lines = f.readlines()
     queries_list = [i for i, _ in enumerate(lines, start=1)]
 
-tf_idf_queries=tf_idf(queries_filtered, queries_list, queries=True)
+tf_idf_queries=tf_idf(queries_filtered, queries_list, queries=True,IDF=idf)
 tf_idf_queries.to_csv('vsm_queries.csv', index=True)
 
 

@@ -123,9 +123,6 @@ queries_filtered = pd.merge(queries_inverted_index, pd.DataFrame({'word': common
 documents = sorted(os.listdir('docs'))
 idf=get_idf(docs_filtered,documents)
 tf_idf_docs=tf_idf(docs_filtered,documents, queries=False,IDF=idf)
-# Save the DataFrame to a CSV file
-tf_idf_docs.to_csv('vsm.csv', index=True)
-
 
 '''
 Now lets focus on the calculation of TF-IDF of the queries
@@ -141,8 +138,6 @@ with open('Queries_20', 'r') as f:
     queries_list = [i for i, _ in enumerate(lines, start=1)]
 
 tf_idf_queries=tf_idf(queries_filtered, queries_list, queries=True,IDF=idf)
-tf_idf_queries.to_csv('vsm_queries.csv', index=True)
-
 
 # Calculate and store similarities for all queries in a dictionary
 query_rankings = {}

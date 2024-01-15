@@ -14,29 +14,10 @@ import pandas as pd
 from find_and_change_ranking import find_files,  get_detailed_relevant_docs
 import matplotlib.pyplot as plt
 
-#RECALL@K FUNCTION
-def recall(retrieved,relevant,k):
-    x=len(set(relevant).intersection(retrieved[:k]))
-    y=len(relevant)
-    return x/y
-
 #PRECISION@K FUNCTION
 def precision(retrieved,relevant,k):
     x=len(set(relevant).intersection(retrieved[:k]))
     return x/k
-
-def recall_precision_graph(K,retrieved,relevant,numOfqueries):
-    precision_values=[]
-    recall_values=[]
-    mean_pr=0
-    for k in range(K):
-        for query in range(numOfqueries):
-            pr=precision(retrieved[query],relevant[query],k+1)
-            mean_pr=mean_pr+pr/numOfqueries #mean pr an the same recall level
-        precision_values.append(mean_pr)
-    print(precision_values)
-    print("--------------------------------------------------------------------------------------------")
-    return precision_values
 
 #CALCULATION OF MAP (MEAN AVERAGE PRECISION) EVALUATION METRIC
 def mean_average_precision(K,retrieved,relevant):
@@ -147,11 +128,8 @@ for expert in range (1,5):
     ndgc_colbert.append(ndgc_1)
     ndgc_vsm.append(ndgc_2)
 
-
-recall_precision_graph(10,retrieved_colbert,relevant,20)
-
 #FROM THIS POINT ON WE ARE JUST CREATING PLOTS FOR EVERY METRIC WE USED 
-'''    
+    
 x=[1]
 x.extend(range(10,100,10))
 x_axis=list(range(1,101))
@@ -207,4 +185,4 @@ plt.title('Relevance score by JBW')
 
 plt.show()
 
-'''
+#ALL GRAPHS EXIST IN DIRECTORY 'graph_figures/'

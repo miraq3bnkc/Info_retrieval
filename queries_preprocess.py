@@ -5,7 +5,6 @@ need to preprocess the queries in the same way we did for the documents
 in the creation of the inverted index. 
 Queries are located at "Queries_10.txt"
 """
-import pandas as pd
 from inverted_index import generate_index_data, generate_inverted_index
 
 

@@ -1,5 +1,5 @@
 """In our C.F. collection we have many different variant forms for the same word.
-   In other words, we see the same numbers represented differently (eg. "52" and "fiftytwo") 
+   For example, we see the same numbers represented differently (eg. "52" and "fiftytwo") 
    So, in this script we are developing a function that converts words like "fiftytwo" to 
    their equivalent "52" """
 
@@ -8,7 +8,7 @@ from num2words import num2words
 
 def words_to_numbers(words):
     word_to_num = create_word_to_num_mapping()
-    
+
     for i, word in enumerate(words):
         try:
             if word.lower()!="point":
@@ -37,3 +37,15 @@ def create_word_to_num_mapping():
         word_to_num[word] = str(number)  # Map the word to the number
 
     return word_to_num
+
+
+#CHANGE REPRESENTATION OF "1ST" TO "first" etc. 
+def replace_numerical_ordinals(words):
+    for i, word in enumerate(words):
+        if word[:-2].isdigit() and word[-2:].lower() in ['st', 'nd', 'rd', 'th']:
+            print("in if",word)
+            num = int(word[:-2])
+            ordinal_word = num2words(num, ordinal=True)
+            words[i] = ordinal_word
+
+    return words

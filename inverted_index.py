@@ -1,7 +1,6 @@
-import os
 import pandas as pd
 from nltk.stem import SnowballStemmer
-from word_conversion import words_to_numbers
+from word_conversion import words_to_numbers, replace_numerical_ordinals
 '''from nltk.corpus import stopwords
 
 # Download NLTK stopwords 
@@ -11,8 +10,10 @@ nltk.download('stopwords')
 leaving out for now'''
 
 def generate_index_data(index,text,query):
-    tokens = text.split() # split so as to get all the words of the query
+    tokens = text.split() # split so as to get all the words
     tokens=  words_to_numbers(tokens)
+    
+    tokens = replace_numerical_ordinals(tokens)
     # Create a SnowballStemmer for English (Porter2)
     porter2 = SnowballStemmer('english')
 

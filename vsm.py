@@ -1,7 +1,7 @@
 """
 This Python file aims to describe and generate a Vector Space Model (VSM) 
 for a collection of 1209 documents related to C.F. available in the 'docs/'
-directory. The queries used for comparison are located at "Queries_20.txt" 
+directory. The queries used for comparison are located at "Queries_20" 
 file we will use the preprocessed and index information about the queries
 located at "queries.csv". An inverted index that provides all the info we 
 need about the collection is used and located at "inverted_index.csv"

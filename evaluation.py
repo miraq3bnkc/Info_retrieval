@@ -10,6 +10,7 @@ For each method we ranked k=100 similar documents for every query.
 """
 
 import math
+from numpy import trapz
 import pandas as pd
 from find_and_change_ranking import find_files,  get_detailed_relevant_docs
 import matplotlib.pyplot as plt
@@ -39,7 +40,7 @@ def mean_average_precision(K,retrieved,relevant):
     return mean_average_precision
 
 #CALCULATION OF NDCG (Normalization Discounted Cumulative Gain) EVALUATION METRIC
-def ndgc(K,retrieved,numOfqueries,expert):
+def ndcg(K,retrieved,numOfqueries,expert):
     experts=['Expert 1',"Expert 2","Expert 3","Expert 4"]
     detailed=get_detailed_relevant_docs()
     avg_dcg=0
@@ -72,8 +73,8 @@ def ndgc(K,retrieved,numOfqueries,expert):
                 idcg=idcg+sorted_gains[i-1]/discount #ideal discounted cumulative gain
         avg_dcg=avg_dcg+dcg/numOfqueries
         avg_idcg=avg_idcg+idcg/numOfqueries
-    ndgc_score=avg_dcg/avg_idcg
-    return ndgc_score
+    ndcg_score=avg_dcg/avg_idcg
+    return ndcg_score
 
 def get_retrieved_docs(dataframe):
     # Create an empty dictionary to store results
@@ -92,6 +93,15 @@ def get_retrieved_docs(dataframe):
         result_list.append(document_ids_list)
     return result_list
 
+#get difference of two graphs
+def area_difference(K, y1, y2):
+    x=range(1,K+1)
+    area1 = trapz(y1, x)
+    area2 = trapz(y2, x)
+    return area1 - area2
+
+
+'''THIS IS WHERE THE MAIN CODE STARTS'''
 
 colbert_rank=pd.read_csv(find_files("ranking.tsv"),delimiter='\t')
 vsm_rank=pd.read_csv("vsm_rankings.csv")
@@ -109,24 +119,31 @@ retrieved_vsm=get_retrieved_docs(vsm_rank)
 
 map_colbert=[] #values for map y points
 map_vsm=[] #values for map y points
-ndgc_colbert=[]
-ndgc_vsm=[] #list of lists for every experts y values
+ndcg_colbert=[]
+ndcg_vsm=[] #list of lists for every experts y values
 
 for K in range(1,101):
     map_colbert.append(mean_average_precision(K,retrieved_colbert,relevant))
     map_vsm.append(mean_average_precision(K,retrieved_vsm,relevant))
 
-for expert in range (1,5):   
-    ndgc_1=[]
-    ndgc_2=[]
-    for K in range(1,101):  
-        colbert_ndgc=ndgc(K,retrieved_colbert,len(queries_relevant),expert)
-        ndgc_1.append(colbert_ndgc)
-        vsm_ndgc=ndgc(K,retrieved_vsm,len(queries_relevant),expert)
-        ndgc_2.append(vsm_ndgc)
+map_area=area_difference(100,map_colbert,map_vsm)
+print("The MAP of Colbert is ",map_area,"different from VSM")
 
-    ndgc_colbert.append(ndgc_1)
-    ndgc_vsm.append(ndgc_2)
+for expert in range (1,5):   
+    ndcg_1=[]
+    ndcg_2=[]
+    for K in range(1,101):  
+        colbert_ndcg=ndcg(K,retrieved_colbert,len(queries_relevant),expert)
+        ndcg_1.append(colbert_ndcg)
+        vsm_ndcg=ndcg(K,retrieved_vsm,len(queries_relevant),expert)
+        ndcg_2.append(vsm_ndcg)
+
+    ndcg_colbert.append(ndcg_1)
+    ndcg_vsm.append(ndcg_2)
+
+for j in range(0,4):
+    ndcg_area=area_difference(100,ndcg_colbert[j],ndcg_vsm[j])
+    print("The NDCG of Colbert is ",ndcg_area,"different from VSM (expert_",j+1,")")
 
 #FROM THIS POINT ON WE ARE JUST CREATING PLOTS FOR EVERY METRIC WE USED 
     
@@ -144,8 +161,8 @@ plt.ylabel("Mean Average Precision")
 plt.xlabel("K items returned")
 
 plt.figure(2)
-plt.plot(x_axis,ndgc_colbert[0],c='magenta',label='Colbert')
-plt.plot(x_axis,ndgc_vsm[0],c='blue',label='VSM')
+plt.plot(x_axis,ndcg_colbert[0],c='magenta',label='Colbert')
+plt.plot(x_axis,ndcg_vsm[0],c='blue',label='VSM')
 plt.xticks(range(0,100,10), x)
 leg = plt.legend(loc='upper right')
 
@@ -154,8 +171,8 @@ plt.xlabel("K items returned")
 plt.title('Relevance score by REW')
 
 plt.figure(3)
-plt.plot(x_axis,ndgc_colbert[1],c='magenta',label='Colbert')
-plt.plot(x_axis,ndgc_vsm[1],c='blue',label='VSM')
+plt.plot(x_axis,ndcg_colbert[1],c='magenta',label='Colbert')
+plt.plot(x_axis,ndcg_vsm[1],c='blue',label='VSM')
 plt.xticks(range(0,100,10), x)
 leg = plt.legend(loc='upper right')
 
@@ -164,8 +181,8 @@ plt.xlabel("K items returned")
 plt.title('Relevance score by REW colleagues')
 
 plt.figure(4)
-plt.plot(x_axis,ndgc_colbert[2],c='magenta',label='Colbert')
-plt.plot(x_axis,ndgc_vsm[2],c='blue',label='VSM')
+plt.plot(x_axis,ndcg_colbert[2],c='magenta',label='Colbert')
+plt.plot(x_axis,ndcg_vsm[2],c='blue',label='VSM')
 plt.xticks(range(0,100,10), x)
 leg = plt.legend(loc='upper right')
 
@@ -174,8 +191,8 @@ plt.xlabel("K items returned")
 plt.title('Relevance score by REW post-doctorates')
 
 plt.figure(5)
-plt.plot(x_axis,ndgc_colbert[1],c='magenta',label='Colbert')
-plt.plot(x_axis,ndgc_vsm[1],c='blue',label='VSM')
+plt.plot(x_axis,ndcg_colbert[1],c='magenta',label='Colbert')
+plt.plot(x_axis,ndcg_vsm[1],c='blue',label='VSM')
 plt.xticks(range(0,100,10), x)
 leg = plt.legend(loc='upper right')
 

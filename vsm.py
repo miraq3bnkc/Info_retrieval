@@ -153,7 +153,7 @@ for query_id in queries_list:
     
     # Sort similarities in descending order
     similarities.sort(key=lambda x: x[1], reverse=True)
-    query_rankings[query_id] = similarities[:100]  # Store top 5 similarities for each query
+    query_rankings[query_id] = similarities[:100]  # Store top 100 similarities for each query
 
 # Convert the similarity data into a DataFrame
 data = {'Query': [], 'Document_ID': [], 'Rank': [], 'Similarity': []}

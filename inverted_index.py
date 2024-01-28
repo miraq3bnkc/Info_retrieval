@@ -1,13 +1,9 @@
 import pandas as pd
 from nltk.stem import SnowballStemmer
 from word_conversion import words_to_numbers, replace_numerical_ordinals
-'''from nltk.corpus import stopwords
-
-# Download NLTK stopwords 
+from nltk.corpus import stopwords
 import nltk
-nltk.download('stopwords')
 
-leaving out for now'''
 
 def generate_index_data(index,text,query):
     tokens = text.split() # split so as to get all the words
@@ -17,10 +13,12 @@ def generate_index_data(index,text,query):
     # Create a SnowballStemmer for English (Porter2)
     porter2 = SnowballStemmer('english')
 
+    # Download NLTK stopwords 
+    nltk.download('stopwords')
     # Get the list of English stop words
-    #stop_words = set(stopwords.words('english'))
+    stop_words = set(stopwords.words('english'))
 
-    stemmed_tokens = [porter2.stem(token) for token in tokens]  # Stemming the tokens
+    stemmed_tokens = [porter2.stem(token) for token in tokens if token.lower() not in stop_words]  # Stemming the tokens
     words=set(stemmed_tokens)  # Add words to the set , so as to not have duplicates
     data = []  # Create a list to store dictionaries for each word
 
